@@ -1,0 +1,20 @@
+version: '3'
+services:
+  db:
+    image: 'postgres:latest'
+    environment: 
+      POSTGRES_PASSWORD: urlshortener
+      POSTGRES_USER: urlshortener
+      POSTGRES_DB: urlshortener
+    volumes: 
+      - ./pgdata:/var/lib/postgresql/data
+    ports: 
+      - "5432:5432"
+  app:
+    container_name: ChallengeEncurtador-api
+    restart: always
+    build: .
+    ports: 
+      - "8081:8081"
+    depends_on: 
+      - db
