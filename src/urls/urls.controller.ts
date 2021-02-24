@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  NotFoundException,
   Param,
   Post,
   Res,
@@ -10,10 +9,9 @@ import {
 import { ApiBody } from '@nestjs/swagger';
 import { Response } from 'express';
 import { UrlDto } from './dtos/url.dto';
-import { UrlEntity } from './entities/url.entity';
 import { UrlsService } from './urls.service';
 
-@Controller('urls')
+@Controller()
 export class UrlsController {
   constructor(private readonly urlsService: UrlsService) {}
 
@@ -23,12 +21,14 @@ export class UrlsController {
     @Res() res: Response,
   ): Promise<void> {
     const sUrlOnRepo = await this.urlsService.getByShortUrl(sUrl);
-    res.redirect(sUrlOnRepo.longUrl.toString());
+    res.redirect(sUrlOnRepo)
   }
 
-  @Post('/encurtador')
+  @Post('encurtador')
   @ApiBody({ type: UrlDto })
-  async create(@Body() url: UrlDto): Promise<UrlEntity> {
-    return await this.urlsService.create(url);
+  async create(@Body() url: UrlDto, @Res() res: Response): Promise<void> {
+    const _url = await this.urlsService.create(url);
+    const newUrl = "localhost:8081/" + _url.shortUrl
+    res.json({ newUrl: newUrl})
   }
 }

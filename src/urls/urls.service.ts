@@ -15,12 +15,8 @@ export class UrlsService {
     @InjectRepository(UrlEntity)
     private urlRepository: Repository<UrlEntity>,
   ) {}
-
-  async findAll(): Promise<UrlEntity[]> {
-    return await this.urlRepository.find();
-  }
-
-  async getByShortUrl(url: string): Promise<UrlEntity> {
+  
+  async getByShortUrl(url: string): Promise<string> {
     const urlOnRepo = await this.urlRepository.findOne({ shortUrl: url });
     if (!urlOnRepo) throw new NotFoundException('URL Not Found');
 
@@ -28,7 +24,7 @@ export class UrlsService {
       throw new BadRequestException('URL expiration date is over');
     }
 
-    return urlOnRepo;
+    return urlOnRepo.longUrl;
   }
 
   async create(url: UrlEntity): Promise<UrlEntity> {

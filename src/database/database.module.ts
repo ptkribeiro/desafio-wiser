@@ -7,8 +7,8 @@ import { UrlEntity } from 'src/urls/entities/url.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      username: 'urlshortener',
-      password: 'urlshortener',
+      username: 'postgres',
+      password: 'postgres',
       database: 'urlshortener',
       entities: [UrlEntity],
       synchronize: true,
